@@ -9,10 +9,10 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   font-size: 16px;
-  background-color: #fafafa;
-  color: #000000;
   line-height: 1.5;
   letter-spacing: 0.02em;
+  color: #000000;
+  background-color: #fafafa;
 }
 
 .header-page {
@@ -25,9 +25,9 @@ body {
   justify-content: center;
   margin-left: auto;
   margin-right: auto;
-  font: inherit;
   padding: 8px;
   min-width: 400px;
+  font: inherit;
 }
 
 .search-form__input {
@@ -37,6 +37,7 @@ body {
   font-size: 16px;
   border: unset;
   border-radius: 5px;
+  outline: unset;
 }
 
 .search-form__input::placeholder {
