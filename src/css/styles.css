@@ -36,7 +36,7 @@ body {
   min-width: 250px;
   font-size: 16px;
   border: unset;
-  border-radius: 5px;
+  border-radius: 4px;
   outline: unset;
 }
 
@@ -55,7 +55,7 @@ body {
   letter-spacing: 0.02em;
   background-color: #ffee00;
   border: unset;
-  border-radius: 5px;
+  border-radius: 4px;
   cursor: pointer;
   transition: background-color 250ms ease-in-out, box-shadow 250ms ease-in-out;
 }
