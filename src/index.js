@@ -17,19 +17,18 @@ function onButtonSearchImagesClick(e) {
   const searchQuery = e.currentTarget.elements.searchQuery.value.trim();
 
   if (!searchQuery) {
-    return;
+    return emptySearchQuery();
   }
-  isCleaningMarkupGallery();
+  // isCleaningMarkupGallery();
 
   onFetchImages(searchQuery)
     .then(images => {
       if (images.hits.length === 0 || images.hits === 'undefined') {
-        return isErrorPayload();
+        return ErrorPayload();
       }
-
-      isSuccessPayload(images);
-      console.log(images);
-      renderImages(images.hits);
+      CleaningMarkupGallery();
+      SuccessPayload(images);
+      renderImages(images);
     })
     .catch(error => console.log(error));
 }
@@ -49,21 +48,25 @@ function onFetchImages(searchQuery) {
   });
 }
 
-function renderImages(images) {
-  const markup = renderCardsTpl(images);
+function renderImages({ hits }) {
+  const markup = renderCardsTpl(hits);
   refs.gallery.insertAdjacentHTML('beforeend', markup);
 }
 
-function isCleaningMarkupGallery() {
+function CleaningMarkupGallery() {
   refs.gallery.innerHTML = '';
 }
 
-function isErrorPayload() {
+function ErrorPayload() {
   Notify.failure('Sorry, there are no images matching your search query. Please try again.');
 }
 
-function isSuccessPayload({ totalHits }) {
+function SuccessPayload({ totalHits }) {
   Notify.success(`Hooray! We found ${totalHits} images.`);
+}
+
+function emptySearchQuery() {
+  Notify.info('Enter please keyword or words for begin search');
 }
 
 // function renderImages(images) {
