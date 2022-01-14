@@ -1,3 +1,5 @@
+import { Notify } from 'notiflix/build/notiflix-notify-aio';
+
 import './css/styles.css';
 
 const DEBOUNCE_DELAY = 300;
@@ -18,11 +20,11 @@ function onButtonSearchImagesClick(e) {
   onFetchImages(searchQuery)
     .then(images => {
       if (images.hits.length === 0 || images.hits === 'undefined') {
-        return console.log(
+        return Notify.failure(
           'Sorry, there are no images matching your search query. Please try again.',
         );
       }
-      console.log(`Hooray! We found ${images.totalHits} images.`);
+      Notify.success(`Hooray! We found ${images.totalHits} images.`);
       console.log(images);
       renderImages(images.hits);
     })
