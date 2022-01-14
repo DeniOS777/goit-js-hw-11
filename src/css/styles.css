@@ -34,7 +34,7 @@ body {
 }
 
 .header-page {
-  margin-bottom: 15px;
+  margin-bottom: 20px;
   text-align: center;
   background-color: #2360c1;
 }
@@ -93,6 +93,12 @@ body {
 .photo-card {
   margin: 15px;
   flex-basis: calc((100% - 120px) / 4);
+}
+
+.info {
+  border-left: 1px solid #eeeeee;
+  border-right: 1px solid #eeeeee;
+  border-bottom: 1px solid #eeeeee;
 }
 
 .info-item {
