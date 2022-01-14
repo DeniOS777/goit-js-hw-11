@@ -22,7 +22,9 @@ function onButtonSearchImagesClick(e) {
           'Sorry, there are no images matching your search query. Please try again.',
         );
       }
+      console.log(`Hooray! We found ${images.totalHits} images.`);
       console.log(images);
+      renderImages(images.hits);
     })
     .catch(error => console.log(error));
 }
@@ -46,19 +48,19 @@ function renderImages(images) {
   const markup = images
     .map(item => {
       return `<div class="photo-card">
-  <img src="" alt="" loading="lazy" />
+  <img src="${item.webformatURL}" alt="${item.tags}" loading="lazy" />
   <div class="info">
     <p class="info-item">
-      <b>Likes</b>
+      <b>Likes</b>${item.likes}
     </p>
     <p class="info-item">
-      <b>Views</b>
+      <b>Views</b>${item.views}
     </p>
     <p class="info-item">
-      <b>Comments</b>
+      <b>Comments</b>${item.comments}
     </p>
     <p class="info-item">
-      <b>Downloads</b>
+      <b>Downloads</b>${item.downloads}
     </p>
   </div>
 </div>`;
