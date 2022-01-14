@@ -3,7 +3,7 @@ import renderCardsTpl from './templates/renderCardsTpl';
 
 import './css/styles.css';
 
-const DEBOUNCE_DELAY = 300;
+// const DEBOUNCE_DELAY = 300;
 
 const refs = {
   form: document.querySelector('.search-form'),
@@ -15,17 +15,19 @@ refs.form.addEventListener('submit', onButtonSearchImagesClick);
 function onButtonSearchImagesClick(e) {
   e.preventDefault();
   const searchQuery = e.currentTarget.elements.searchQuery.value.trim();
+
   if (!searchQuery) {
     return;
   }
+  isCleaningMarkupGallery();
+
   onFetchImages(searchQuery)
     .then(images => {
       if (images.hits.length === 0 || images.hits === 'undefined') {
-        return Notify.failure(
-          'Sorry, there are no images matching your search query. Please try again.',
-        );
+        return isErrorPayload();
       }
-      Notify.success(`Hooray! We found ${images.totalHits} images.`);
+
+      isSuccessPayload(images);
       console.log(images);
       renderImages(images.hits);
     })
@@ -50,6 +52,18 @@ function onFetchImages(searchQuery) {
 function renderImages(images) {
   const markup = renderCardsTpl(images);
   refs.gallery.insertAdjacentHTML('beforeend', markup);
+}
+
+function isCleaningMarkupGallery() {
+  refs.gallery.innerHTML = '';
+}
+
+function isErrorPayload() {
+  Notify.failure('Sorry, there are no images matching your search query. Please try again.');
+}
+
+function isSuccessPayload({ totalHits }) {
+  Notify.success(`Hooray! We found ${totalHits} images.`);
 }
 
 // function renderImages(images) {
