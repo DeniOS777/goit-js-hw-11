@@ -96,6 +96,9 @@ body {
 }
 
 .info {
+  display: flex;
+  justify-content: space-around;
+  padding: 10px;
   border-left: 1px solid #eeeeee;
   border-right: 1px solid #eeeeee;
   border-bottom: 1px solid #eeeeee;
@@ -106,4 +109,5 @@ body {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  font-size: 14px;
 }
