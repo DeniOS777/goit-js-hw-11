@@ -34,6 +34,7 @@ body {
 }
 
 .header-page {
+  margin-bottom: 15px;
   text-align: center;
   background-color: #2360c1;
 }
@@ -81,6 +82,17 @@ body {
 .search-form-btn:hover {
   background-color: #f5e509;
   box-shadow: 1px 2px 4px 0 rgb(0 0 0 / 80%);
+}
+
+.gallery {
+  display: flex;
+  flex-wrap: wrap;
+  margin: -15px;
+}
+
+.photo-card {
+  margin: 15px;
+  flex-basis: calc((100% - 120px) / 4);
 }
 
 .info-item {
