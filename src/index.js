@@ -17,20 +17,27 @@ function onButtonSearchImagesClick(e) {
   }
   onFetchImages(searchQuery)
     .then(images => {
+      if (images.hits.length === 0 || images.hits === 'undefined') {
+        return console.log(
+          'Sorry, there are no images matching your search query. Please try again.',
+        );
+      }
       console.log(images);
-      console.log(images.total);
     })
     .catch(error => console.log(error));
 }
 
 function onFetchImages(searchQuery) {
-  return fetch(
-    `https://pixabay.com/api/?key=25243201-da43b78e8715fb1cc3094e420&q=${searchQuery}&image_type=photo&orientation=horizontal&safesearch=true`,
-  ).then(resolve => {
+  const searchParams = new URLSearchParams({
+    key: '25243201-da43b78e8715fb1cc3094e420',
+    image_type: 'photo',
+    orientation: 'horizontal',
+    safesearch: true,
+  });
+  return fetch(`https://pixabay.com/api/?q=${searchQuery}&${searchParams}`).then(resolve => {
     if (resolve.status !== 200) {
-      throw new Error(error.message);
+      throw new Error(response.status);
     }
-    console.log(resolve);
     return resolve.json();
   });
 }
