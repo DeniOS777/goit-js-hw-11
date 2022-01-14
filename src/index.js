@@ -19,15 +19,14 @@ function onButtonSearchImagesClick(e) {
   if (!searchQuery) {
     return emptySearchQuery();
   }
-  // isCleaningMarkupGallery();
 
   onFetchImages(searchQuery)
     .then(images => {
       if (images.hits.length === 0 || images.hits === 'undefined') {
-        return ErrorPayload();
+        return errorPayload();
       }
-      CleaningMarkupGallery();
-      SuccessPayload(images);
+      cleaningMarkupGallery();
+      successPayload(images);
       renderImages(images);
     })
     .catch(error => console.log(error));
@@ -53,15 +52,15 @@ function renderImages({ hits }) {
   refs.gallery.insertAdjacentHTML('beforeend', markup);
 }
 
-function CleaningMarkupGallery() {
+function cleaningMarkupGallery() {
   refs.gallery.innerHTML = '';
 }
 
-function ErrorPayload() {
+function errorPayload() {
   Notify.failure('Sorry, there are no images matching your search query. Please try again.');
 }
 
-function SuccessPayload({ totalHits }) {
+function successPayload({ totalHits }) {
   Notify.success(`Hooray! We found ${totalHits} images.`);
 }
 
