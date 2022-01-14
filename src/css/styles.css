@@ -12,7 +12,7 @@ p {
 img {
   display: block;
   height: 213px;
-  max-width: 100%;
+  width: 100%;
 }
 
 body {
