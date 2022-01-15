@@ -43,6 +43,8 @@ function onButtonSearchImagesClick(e) {
 }
 
 function onButtonLoadMoreClick() {
+  refs.buttonLoadMore.classList.toggle('is-hide');
+
   onFetchImages(searchQuery)
     .then(images => {
       if (images.hits.length === 0 || images.hits === 'undefined') {
@@ -50,6 +52,7 @@ function onButtonLoadMoreClick() {
       }
       page += 1;
       renderImages(images);
+      refs.buttonLoadMore.classList.toggle('is-hide');
     })
     .catch(error => console.log(error));
 }
