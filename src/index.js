@@ -8,11 +8,13 @@ import './css/styles.css';
 const refs = {
   form: document.querySelector('.search-form'),
   gallery: document.querySelector('.gallery'),
-  button: document.querySelector('.btn__load-more'),
+  buttonLoadMore: document.querySelector('.btn__load-more'),
 };
 
+refs.buttonLoadMore.classList.toggle('is-hide');
+
 refs.form.addEventListener('submit', onButtonSearchImagesClick);
-refs.button.addEventListener('click', onButtonLoadMoreClick);
+refs.buttonLoadMore.addEventListener('click', onButtonLoadMoreClick);
 
 let searchQuery = '';
 let page = 1;
@@ -31,10 +33,11 @@ function onButtonSearchImagesClick(e) {
         cleaningMarkupGallery();
         return errorPayload();
       }
-      page = 1;
+
       cleaningMarkupGallery();
       successPayload(images);
       renderImages(images);
+      refs.buttonLoadMore.classList.toggle('is-hide');
     })
     .catch(error => console.log(error));
 }
