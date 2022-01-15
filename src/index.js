@@ -11,7 +11,7 @@ const refs = {
   buttonLoadMore: document.querySelector('.btn__load-more'),
 };
 
-refs.buttonLoadMore.classList.toggle('is-hide');
+visibleOrHideLoadMore();
 
 refs.form.addEventListener('submit', onButtonSearchImagesClick);
 refs.buttonLoadMore.addEventListener('click', onButtonLoadMoreClick);
@@ -37,14 +37,13 @@ function onButtonSearchImagesClick(e) {
       cleaningMarkupGallery();
       successPayload(images);
       renderImages(images);
-      refs.buttonLoadMore.classList.toggle('is-hide');
+      visibleOrHideLoadMore();
     })
     .catch(error => console.log(error));
 }
 
 function onButtonLoadMoreClick() {
-  refs.buttonLoadMore.classList.toggle('is-hide');
-
+  visibleOrHideLoadMore();
   onFetchImages(searchQuery)
     .then(images => {
       if (images.hits.length === 0 || images.hits === 'undefined') {
@@ -52,7 +51,7 @@ function onButtonLoadMoreClick() {
       }
       page += 1;
       renderImages(images);
-      refs.buttonLoadMore.classList.toggle('is-hide');
+      visibleOrHideLoadMore();
     })
     .catch(error => console.log(error));
 }
@@ -94,4 +93,8 @@ function successPayload({ totalHits }) {
 
 function emptySearchQuery() {
   Notify.info('Field of search is empty, enter please keyword or words for begin search');
+}
+
+function visibleOrHideLoadMore() {
+  refs.buttonLoadMore.classList.toggle('is-hide');
 }
