@@ -8,18 +8,35 @@ import './css/styles.css';
 const refs = {
   form: document.querySelector('.search-form'),
   gallery: document.querySelector('.gallery'),
+  button: document.querySelector('.btn__load-more'),
 };
 
 refs.form.addEventListener('submit', onButtonSearchImagesClick);
+refs.button.addEventListener('click', onButtonLoadMoreClick);
+
+let searchQuery = '';
 
 function onButtonSearchImagesClick(e) {
   e.preventDefault();
-  const searchQuery = e.currentTarget.elements.searchQuery.value.trim();
+  searchQuery = e.currentTarget.elements.searchQuery.value.trim();
 
   if (!searchQuery) {
     return emptySearchQuery();
   }
 
+  onFetchImages(searchQuery)
+    .then(images => {
+      if (images.hits.length === 0 || images.hits === 'undefined') {
+        return errorPayload();
+      }
+      cleaningMarkupGallery();
+      successPayload(images);
+      renderImages(images);
+    })
+    .catch(error => console.log(error));
+}
+
+function onButtonLoadMoreClick() {
   onFetchImages(searchQuery)
     .then(images => {
       if (images.hits.length === 0 || images.hits === 'undefined') {
@@ -38,6 +55,7 @@ function onFetchImages(searchQuery) {
     image_type: 'photo',
     orientation: 'horizontal',
     safesearch: true,
+    per_page: 40,
   });
   return fetch(`https://pixabay.com/api/?q=${searchQuery}&${searchParams}`).then(resolve => {
     if (resolve.status !== 200) {
