@@ -86,10 +86,20 @@ body {
 .btn__load-more {
   margin-left: auto;
   margin-right: auto;
+  min-width: 150px;
+  padding: 10px 0;
+  font-weight: 700;
+  color: #ffffff;
+  background-color: #39b323;
 }
 
-.btn:hover {
+.btn__search-form:hover {
   background-color: #f5e509;
+  box-shadow: 1px 2px 4px 0 rgb(0 0 0 / 80%);
+}
+
+.btn__load-more:hover {
+  background-color: #309b1e;
   box-shadow: 1px 2px 4px 0 rgb(0 0 0 / 80%);
 }
 
