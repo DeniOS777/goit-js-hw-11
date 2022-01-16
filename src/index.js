@@ -11,7 +11,7 @@ const refs = {
   buttonLoadMore: document.querySelector('.btn__load-more'),
 };
 
-visibleOrHideLoadMore();
+isHideButtonLoadMore();
 
 refs.form.addEventListener('submit', onButtonSearchImagesClick);
 refs.buttonLoadMore.addEventListener('click', onButtonLoadMoreClick);
@@ -27,6 +27,8 @@ function onButtonSearchImagesClick(e) {
     return emptySearchQuery();
   }
 
+  isHideButtonLoadMore();
+
   onFetchImages(searchQuery)
     .then(images => {
       if (images.hits.length === 0 || images.hits === 'undefined') {
@@ -37,21 +39,23 @@ function onButtonSearchImagesClick(e) {
       cleaningMarkupGallery();
       successPayload(images);
       renderImages(images);
-      visibleOrHideLoadMore();
+      isVisibleButtonLoadMore();
     })
     .catch(error => console.log(error));
 }
 
 function onButtonLoadMoreClick() {
-  visibleOrHideLoadMore();
+  isHideButtonLoadMore();
+
   onFetchImages(searchQuery)
     .then(images => {
       if (images.hits.length === 0 || images.hits === 'undefined') {
         return errorPayload();
       }
+
       page += 1;
       renderImages(images);
-      visibleOrHideLoadMore();
+      isVisibleButtonLoadMore();
     })
     .catch(error => console.log(error));
 }
@@ -95,6 +99,10 @@ function emptySearchQuery() {
   Notify.info('Field of search is empty, enter please keyword or words for begin search');
 }
 
-function visibleOrHideLoadMore() {
-  refs.buttonLoadMore.classList.toggle('is-hide');
+function isVisibleButtonLoadMore() {
+  refs.buttonLoadMore.classList.remove('is-hide');
+}
+
+function isHideButtonLoadMore() {
+  refs.buttonLoadMore.classList.add('is-hide');
 }
