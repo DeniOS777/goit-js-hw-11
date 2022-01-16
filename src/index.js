@@ -42,6 +42,7 @@ function onButtonSearchImagesClick(e) {
       cleaningMarkupGallery();
       successPayload(images);
       renderImages(images);
+      let lightbox = new SimpleLightbox('.gallery a');
       incrementPageNumber();
       isVisibleButtonLoadMore();
     })
@@ -60,6 +61,7 @@ function onButtonLoadMoreClick() {
         return Notify.failure('We are sorry, but you have reached the end of search results.');
       }
       renderImages(images);
+      let lightbox = new SimpleLightbox('.gallery a');
       incrementPageNumber();
       isVisibleButtonLoadMore();
     })
