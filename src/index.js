@@ -1,4 +1,6 @@
 import axios from 'axios';
+import SimpleLightbox from 'simplelightbox';
+import 'simplelightbox/dist/simple-lightbox.min.css';
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
 import renderCardsTpl from './templates/renderCardsTpl';
 
@@ -74,7 +76,6 @@ async function onFetchImages(searchQuery) {
     per_page: 40,
     page: page,
   });
-  // return axios.get(`https://pixabay.com/api/?${searchParams}`).then(response => response.data);
   const response = await axios.get(`https://pixabay.com/api/?${searchParams}`);
   const data = response.data;
   return data;
