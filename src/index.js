@@ -3,8 +3,6 @@ import renderCardsTpl from './templates/renderCardsTpl';
 
 import './css/styles.css';
 
-// const DEBOUNCE_DELAY = 300;
-
 const refs = {
   form: document.querySelector('.search-form'),
   gallery: document.querySelector('.gallery'),
@@ -18,10 +16,12 @@ refs.buttonLoadMore.addEventListener('click', onButtonLoadMoreClick);
 
 let searchQuery = '';
 let page = 1;
+const per_page = 40;
 
 function onButtonSearchImagesClick(e) {
   e.preventDefault();
   searchQuery = e.currentTarget.elements.searchQuery.value.trim();
+
   if (!searchQuery) {
     return emptySearchQuery();
   }
@@ -52,6 +52,9 @@ function onButtonLoadMoreClick() {
     .then(images => {
       if (images.hits.length === 0 || images.hits === 'undefined') {
         return errorPayload();
+      }
+      if (page * per_page > images.totalHits) {
+        return Notify.failure('We are sorry, but you have reached the end of search results.');
       }
       renderImages(images);
       incrementPage();
