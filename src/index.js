@@ -1,3 +1,4 @@
+import axios from 'axios';
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
 import renderCardsTpl from './templates/renderCardsTpl';
 
@@ -73,12 +74,7 @@ function onFetchImages(searchQuery) {
     per_page: 40,
     page: page,
   });
-  return fetch(`https://pixabay.com/api/?${searchParams}`).then(resolve => {
-    if (resolve.status !== 200) {
-      throw new Error(response.status);
-    }
-    return resolve.json();
-  });
+  return axios.get(`https://pixabay.com/api/?${searchParams}`).then(resolve => resolve.data);
 }
 
 function renderImages({ hits }) {
