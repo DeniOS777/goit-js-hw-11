@@ -64,7 +64,7 @@ function onButtonLoadMoreClick() {
     .catch(error => console.log(error.message));
 }
 
-function onFetchImages(searchQuery) {
+async function onFetchImages(searchQuery) {
   const searchParams = new URLSearchParams({
     key: '25243201-da43b78e8715fb1cc3094e420',
     q: searchQuery,
@@ -74,7 +74,10 @@ function onFetchImages(searchQuery) {
     per_page: 40,
     page: page,
   });
-  return axios.get(`https://pixabay.com/api/?${searchParams}`).then(resolve => resolve.data);
+  // return axios.get(`https://pixabay.com/api/?${searchParams}`).then(response => response.data);
+  const response = await axios.get(`https://pixabay.com/api/?${searchParams}`);
+  const data = response.data;
+  return data;
 }
 
 function renderImages({ hits }) {
