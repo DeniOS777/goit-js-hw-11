@@ -26,7 +26,7 @@ function onButtonSearchImagesClick(e) {
     return emptySearchQuery();
   }
 
-  page = 1;
+  resetPage();
   isHideButtonLoadMore();
 
   onFetchImages(searchQuery)
@@ -39,7 +39,7 @@ function onButtonSearchImagesClick(e) {
       cleaningMarkupGallery();
       successPayload(images);
       renderImages(images);
-      page += 1;
+      incrementPage();
       isVisibleButtonLoadMore();
     })
     .catch(error => console.log(error));
@@ -54,7 +54,7 @@ function onButtonLoadMoreClick() {
         return errorPayload();
       }
       renderImages(images);
-      page += 1;
+      incrementPage();
       isVisibleButtonLoadMore();
     })
     .catch(error => console.log(error));
@@ -105,4 +105,12 @@ function isVisibleButtonLoadMore() {
 
 function isHideButtonLoadMore() {
   refs.buttonLoadMore.classList.add('is-hide');
+}
+
+function incrementPage() {
+  page += 1;
+}
+
+function resetPage() {
+  page = 1;
 }
