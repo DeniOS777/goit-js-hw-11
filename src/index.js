@@ -22,11 +22,11 @@ let page = 1;
 function onButtonSearchImagesClick(e) {
   e.preventDefault();
   searchQuery = e.currentTarget.elements.searchQuery.value.trim();
-
   if (!searchQuery) {
     return emptySearchQuery();
   }
 
+  page = 1;
   isHideButtonLoadMore();
 
   onFetchImages(searchQuery)
@@ -39,6 +39,7 @@ function onButtonSearchImagesClick(e) {
       cleaningMarkupGallery();
       successPayload(images);
       renderImages(images);
+      page += 1;
       isVisibleButtonLoadMore();
     })
     .catch(error => console.log(error));
@@ -52,9 +53,8 @@ function onButtonLoadMoreClick() {
       if (images.hits.length === 0 || images.hits === 'undefined') {
         return errorPayload();
       }
-
-      page += 1;
       renderImages(images);
+      page += 1;
       isVisibleButtonLoadMore();
     })
     .catch(error => console.log(error));
@@ -63,19 +63,19 @@ function onButtonLoadMoreClick() {
 function onFetchImages(searchQuery) {
   const searchParams = new URLSearchParams({
     key: '25243201-da43b78e8715fb1cc3094e420',
+    q: searchQuery,
     image_type: 'photo',
     orientation: 'horizontal',
     safesearch: true,
     per_page: 40,
+    page: page,
   });
-  return fetch(`https://pixabay.com/api/?q=${searchQuery}&${searchParams}&page=${page}`).then(
-    resolve => {
-      if (resolve.status !== 200) {
-        throw new Error(response.status);
-      }
-      return resolve.json();
-    },
-  );
+  return fetch(`https://pixabay.com/api/?${searchParams}`).then(resolve => {
+    if (resolve.status !== 200) {
+      throw new Error(response.status);
+    }
+    return resolve.json();
+  });
 }
 
 function renderImages({ hits }) {
