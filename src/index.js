@@ -9,10 +9,10 @@ const refs = {
   buttonLoadMore: document.querySelector('.btn__load-more'),
 };
 
-isHideButtonLoadMore();
-
 refs.form.addEventListener('submit', onButtonSearchImagesClick);
 refs.buttonLoadMore.addEventListener('click', onButtonLoadMoreClick);
+
+isHideButtonLoadMore();
 
 let searchQuery = '';
 let page = 1;
@@ -26,7 +26,7 @@ function onButtonSearchImagesClick(e) {
     return emptySearchQuery();
   }
 
-  resetPage();
+  resetPageNumber();
   isHideButtonLoadMore();
 
   onFetchImages(searchQuery)
@@ -39,7 +39,7 @@ function onButtonSearchImagesClick(e) {
       cleaningMarkupGallery();
       successPayload(images);
       renderImages(images);
-      incrementPage();
+      incrementPageNumber();
       isVisibleButtonLoadMore();
     })
     .catch(error => console.log(error));
@@ -57,7 +57,7 @@ function onButtonLoadMoreClick() {
         return Notify.failure('We are sorry, but you have reached the end of search results.');
       }
       renderImages(images);
-      incrementPage();
+      incrementPageNumber();
       isVisibleButtonLoadMore();
     })
     .catch(error => console.log(error));
@@ -110,10 +110,10 @@ function isHideButtonLoadMore() {
   refs.buttonLoadMore.classList.add('is-hide');
 }
 
-function incrementPage() {
+function incrementPageNumber() {
   page += 1;
 }
 
-function resetPage() {
+function resetPageNumber() {
   page = 1;
 }
