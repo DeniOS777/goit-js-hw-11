@@ -43,7 +43,7 @@ function onButtonSearchImagesClick(e) {
       incrementPageNumber();
       isVisibleButtonLoadMore();
     })
-    .catch(error => console.log(error));
+    .catch(error => console.log(error.message));
 }
 
 function onButtonLoadMoreClick() {
@@ -61,7 +61,7 @@ function onButtonLoadMoreClick() {
       incrementPageNumber();
       isVisibleButtonLoadMore();
     })
-    .catch(error => console.log(error));
+    .catch(error => console.log(error.message));
 }
 
 function onFetchImages(searchQuery) {
