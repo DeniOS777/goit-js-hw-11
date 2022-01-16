@@ -21,6 +21,8 @@ let searchQuery = '';
 let page = 1;
 const per_page = 40;
 
+let gallery = new SimpleLightbox('.gallery a');
+
 function onButtonSearchImagesClick(e) {
   e.preventDefault();
   searchQuery = e.currentTarget.elements.searchQuery.value.trim();
@@ -42,7 +44,8 @@ function onButtonSearchImagesClick(e) {
       cleaningMarkupGallery();
       successPayload(images);
       renderImages(images);
-      let lightbox = new SimpleLightbox('.gallery a');
+      let gallery = new SimpleLightbox('.gallery a');
+      // gallery.open();
       incrementPageNumber();
       isVisibleButtonLoadMore();
     })
@@ -61,7 +64,7 @@ function onButtonLoadMoreClick() {
         return Notify.failure('We are sorry, but you have reached the end of search results.');
       }
       renderImages(images);
-      let lightbox = new SimpleLightbox('.gallery a');
+      gallery.refresh();
       incrementPageNumber();
       isVisibleButtonLoadMore();
     })
