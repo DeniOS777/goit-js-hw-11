@@ -35,15 +35,15 @@ function onButtonSearchImagesClick(e) {
   isHideButtonLoadMore();
 
   onFetchImages(searchQuery)
-    .then(images => {
-      if (images.hits.length === 0 || images.hits === 'undefined') {
+    .then(({ hits, totalHits }) => {
+      if (hits.length === 0 || hits === 'undefined') {
         cleaningMarkupGallery();
         return errorPayload();
       }
 
       cleaningMarkupGallery();
-      successPayload(images);
-      renderImages(images);
+      successPayload(totalHits);
+      renderImages(hits);
       gallery = new SimpleLightbox('.gallery a');
       scrollDownPage();
       incrementPageNumber();
@@ -56,14 +56,14 @@ function onButtonLoadMoreClick() {
   isHideButtonLoadMore();
 
   onFetchImages(searchQuery)
-    .then(images => {
-      if (images.hits.length === 0 || images.hits === 'undefined') {
+    .then(({ hits, totalHits }) => {
+      if (hits.length === 0 || hits === 'undefined') {
         return errorPayload();
       }
-      if (page * per_page > images.totalHits) {
+      if (page * per_page > totalHits) {
         return Notify.failure('We are sorry, but you have reached the end of search results.');
       }
-      renderImages(images);
+      renderImages(hits);
       gallery.refresh();
       scrollDownPage();
       incrementPageNumber();
@@ -87,7 +87,7 @@ async function onFetchImages(searchQuery) {
   return data;
 }
 
-function renderImages({ hits }) {
+function renderImages(hits) {
   const markup = renderCardsTpl(hits);
   refs.gallery.insertAdjacentHTML('beforeend', markup);
 }
@@ -100,7 +100,7 @@ function errorPayload() {
   Notify.failure('Sorry, there are no images matching your search query. Please try again.');
 }
 
-function successPayload({ totalHits }) {
+function successPayload(totalHits) {
   Notify.success(`Hooray! We found ${totalHits} images.`);
 }
 
