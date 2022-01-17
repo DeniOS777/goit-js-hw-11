@@ -22,7 +22,7 @@ const per_page = 40;
 
 isHideButtonLoadMore();
 
-let gallery;
+let galleryModal;
 
 async function onButtonSearchImagesClick(e) {
   e.preventDefault();
@@ -46,7 +46,7 @@ async function onButtonSearchImagesClick(e) {
     cleaningMarkupGallery();
     successPayload(totalHits);
     renderImages(hits);
-    gallery = new SimpleLightbox('.gallery a');
+    galleryModal = new SimpleLightbox('.gallery a');
     scrollDownPage();
     incrementPageNumber();
     isVisibleButtonLoadMore();
@@ -70,7 +70,7 @@ async function onButtonLoadMoreClick() {
     }
 
     renderImages(hits);
-    gallery.refresh();
+    galleryModal.refresh();
     scrollDownPage();
     incrementPageNumber();
     isVisibleButtonLoadMore();
