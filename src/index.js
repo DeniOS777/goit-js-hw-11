@@ -1,10 +1,12 @@
-import axios from 'axios';
 import SimpleLightbox from 'simplelightbox';
-import 'simplelightbox/dist/simple-lightbox.min.css';
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
 import renderCardsTpl from './templates/renderCardsTpl';
+import { onFetchImages } from './api-images';
 
+import 'simplelightbox/dist/simple-lightbox.min.css';
 import './css/styles.css';
+
+export let page = 1;
 
 const refs = {
   form: document.querySelector('.search-form'),
@@ -15,15 +17,14 @@ const refs = {
 refs.form.addEventListener('submit', onButtonSearchImagesClick);
 refs.buttonLoadMore.addEventListener('click', onButtonLoadMoreClick);
 
-isHideButtonLoadMore();
-
 let searchQuery = '';
-let page = 1;
 const per_page = 40;
+
+isHideButtonLoadMore();
 
 let gallery;
 
-function onButtonSearchImagesClick(e) {
+async function onButtonSearchImagesClick(e) {
   e.preventDefault();
   searchQuery = e.currentTarget.elements.searchQuery.value.trim();
 
@@ -34,57 +35,48 @@ function onButtonSearchImagesClick(e) {
   resetPageNumber();
   isHideButtonLoadMore();
 
-  onFetchImages(searchQuery)
-    .then(({ hits, totalHits }) => {
-      if (hits.length === 0 || hits === 'undefined') {
-        cleaningMarkupGallery();
-        return errorPayload();
-      }
+  try {
+    const { hits, totalHits } = await onFetchImages(searchQuery);
 
+    if (hits.length === 0 || hits === 'undefined') {
       cleaningMarkupGallery();
-      successPayload(totalHits);
-      renderImages(hits);
-      gallery = new SimpleLightbox('.gallery a');
-      scrollDownPage();
-      incrementPageNumber();
-      isVisibleButtonLoadMore();
-    })
-    .catch(error => console.log(error.message));
+      return errorPayload();
+    }
+
+    cleaningMarkupGallery();
+    successPayload(totalHits);
+    renderImages(hits);
+    gallery = new SimpleLightbox('.gallery a');
+    scrollDownPage();
+    incrementPageNumber();
+    isVisibleButtonLoadMore();
+  } catch (error) {
+    Notify.failure(error.message);
+  }
 }
 
-function onButtonLoadMoreClick() {
+async function onButtonLoadMoreClick() {
   isHideButtonLoadMore();
 
-  onFetchImages(searchQuery)
-    .then(({ hits, totalHits }) => {
-      if (hits.length === 0 || hits === 'undefined') {
-        return errorPayload();
-      }
-      if (page * per_page > totalHits) {
-        return Notify.failure('We are sorry, but you have reached the end of search results.');
-      }
-      renderImages(hits);
-      gallery.refresh();
-      scrollDownPage();
-      incrementPageNumber();
-      isVisibleButtonLoadMore();
-    })
-    .catch(error => console.log(error.message));
-}
+  try {
+    const { hits, totalHits } = await onFetchImages(searchQuery);
 
-async function onFetchImages(searchQuery) {
-  const searchParams = new URLSearchParams({
-    key: '25243201-da43b78e8715fb1cc3094e420',
-    q: searchQuery,
-    image_type: 'photo',
-    orientation: 'horizontal',
-    safesearch: true,
-    per_page: 40,
-    page: page,
-  });
-  const response = await axios.get(`https://pixabay.com/api/?${searchParams}`);
-  const data = await response.data;
-  return data;
+    if (hits.length === 0 || hits === 'undefined') {
+      return errorPayload();
+    }
+
+    if (page * per_page > totalHits) {
+      return Notify.failure('We are sorry, but you have reached the end of search results.');
+    }
+
+    renderImages(hits);
+    gallery.refresh();
+    scrollDownPage();
+    incrementPageNumber();
+    isVisibleButtonLoadMore();
+  } catch (error) {
+    Notify.failure(error.message);
+  }
 }
 
 function renderImages(hits) {
