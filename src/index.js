@@ -21,7 +21,7 @@ let searchQuery = '';
 let page = 1;
 const per_page = 40;
 
-let gallery = new SimpleLightbox('.gallery a');
+let gallery;
 
 function onButtonSearchImagesClick(e) {
   e.preventDefault();
@@ -44,8 +44,8 @@ function onButtonSearchImagesClick(e) {
       cleaningMarkupGallery();
       successPayload(images);
       renderImages(images);
-      let gallery = new SimpleLightbox('.gallery a');
-      // gallery.open();
+      gallery = new SimpleLightbox('.gallery a');
+      scrollDownPage();
       incrementPageNumber();
       isVisibleButtonLoadMore();
     })
@@ -65,6 +65,7 @@ function onButtonLoadMoreClick() {
       }
       renderImages(images);
       gallery.refresh();
+      scrollDownPage();
       incrementPageNumber();
       isVisibleButtonLoadMore();
     })
@@ -82,7 +83,7 @@ async function onFetchImages(searchQuery) {
     page: page,
   });
   const response = await axios.get(`https://pixabay.com/api/?${searchParams}`);
-  const data = response.data;
+  const data = await response.data;
   return data;
 }
 
@@ -121,4 +122,15 @@ function incrementPageNumber() {
 
 function resetPageNumber() {
   page = 1;
+}
+
+function scrollDownPage() {
+  const { height: cardHeight } = document
+    .querySelector('.gallery')
+    .firstElementChild.getBoundingClientRect();
+
+  window.scrollBy({
+    top: cardHeight * 12,
+    behavior: 'smooth',
+  });
 }
