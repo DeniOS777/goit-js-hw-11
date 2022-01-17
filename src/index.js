@@ -22,7 +22,7 @@ const per_page = 40;
 
 isHideButtonLoadMore();
 
-let galleryModal;
+let galleryModal = new SimpleLightbox('.gallery a');
 
 async function onButtonSearchImagesClick(e) {
   e.preventDefault();
@@ -46,7 +46,7 @@ async function onButtonSearchImagesClick(e) {
     cleaningMarkupGallery();
     successPayload(totalHits);
     renderImages(hits);
-    galleryModal = new SimpleLightbox('.gallery a');
+    galleryModal.refresh();
     scrollDownPage();
     incrementPageNumber();
     isVisibleButtonLoadMore();
