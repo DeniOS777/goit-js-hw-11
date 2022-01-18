@@ -57,10 +57,9 @@ async function onButtonLoadMoreClick() {
       return imagesApiService.errorPayload();
     }
 
-    if (imagesApiService.page * imagesApiService.per_page > totalHits) {
+    if ((imagesApiService.page - 1) * imagesApiService.per_page > totalHits) {
       return Notify.failure('We are sorry, but you have reached the end of search results.');
     }
-
     renderImages(hits);
     galleryModal.refresh();
     scrollDownPage();
