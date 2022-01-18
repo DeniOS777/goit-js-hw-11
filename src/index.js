@@ -1,49 +1,46 @@
 import SimpleLightbox from 'simplelightbox';
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
 import renderCardsTpl from './templates/renderCardsTpl';
-import { onFetchImages } from './api-images';
+import { ImagesApiService } from './images_service';
 import { refs } from './refs';
 
 import 'simplelightbox/dist/simple-lightbox.min.css';
 import './css/styles.css';
 
-export let page = 1;
-
 refs.form.addEventListener('submit', onButtonSearchImagesClick);
 refs.buttonLoadMore.addEventListener('click', onButtonLoadMoreClick);
 
-let searchQuery = '';
-const per_page = 40;
-
-isHideButtonLoadMore();
+const imagesApiService = new ImagesApiService();
 
 let galleryModal = new SimpleLightbox('.gallery a');
 
+isHideButtonLoadMore();
+
 async function onButtonSearchImagesClick(e) {
   e.preventDefault();
-  searchQuery = e.currentTarget.elements.searchQuery.value.trim();
 
-  if (!searchQuery) {
-    return emptySearchQuery();
+  imagesApiService.query = e.currentTarget.elements.searchQuery.value.trim();
+
+  if (!imagesApiService.query) {
+    return imagesApiService.emptySearchQuery();
   }
 
-  resetPageNumber();
+  imagesApiService.resetPageNumber();
   isHideButtonLoadMore();
 
   try {
-    const { hits, totalHits } = await onFetchImages(searchQuery);
+    const { hits, totalHits } = await imagesApiService.onFetchImages();
 
     if (hits.length === 0 || hits === 'undefined') {
       cleaningMarkupGallery();
-      return errorPayload();
+      return imagesApiService.errorPayload();
     }
 
     cleaningMarkupGallery();
-    successPayload(totalHits);
+    imagesApiService.successPayload(totalHits);
     renderImages(hits);
     galleryModal.refresh();
     scrollDownPage();
-    incrementPageNumber();
     isVisibleButtonLoadMore();
   } catch (error) {
     Notify.failure(error.message);
@@ -54,20 +51,19 @@ async function onButtonLoadMoreClick() {
   isHideButtonLoadMore();
 
   try {
-    const { hits, totalHits } = await onFetchImages(searchQuery);
+    const { hits, totalHits } = await imagesApiService.onFetchImages();
 
     if (hits.length === 0 || hits === 'undefined') {
-      return errorPayload();
+      return imagesApiService.errorPayload();
     }
 
-    if (page * per_page > totalHits) {
+    if (imagesApiService.page * imagesApiService.per_page > totalHits) {
       return Notify.failure('We are sorry, but you have reached the end of search results.');
     }
 
     renderImages(hits);
     galleryModal.refresh();
     scrollDownPage();
-    incrementPageNumber();
     isVisibleButtonLoadMore();
   } catch (error) {
     Notify.failure(error.message);
@@ -83,32 +79,12 @@ function cleaningMarkupGallery() {
   refs.gallery.innerHTML = '';
 }
 
-function errorPayload() {
-  Notify.failure('Sorry, there are no images matching your search query. Please try again.');
-}
-
-function successPayload(totalHits) {
-  Notify.success(`Hooray! We found ${totalHits} images.`);
-}
-
-function emptySearchQuery() {
-  Notify.info('Field of search is empty, enter please keyword or words for begin search');
-}
-
 function isVisibleButtonLoadMore() {
   refs.buttonLoadMore.classList.remove('is-hide');
 }
 
 function isHideButtonLoadMore() {
   refs.buttonLoadMore.classList.add('is-hide');
-}
-
-function incrementPageNumber() {
-  page += 1;
-}
-
-function resetPageNumber() {
-  page = 1;
 }
 
 function scrollDownPage() {
