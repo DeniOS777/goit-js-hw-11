@@ -2,17 +2,12 @@ import SimpleLightbox from 'simplelightbox';
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
 import renderCardsTpl from './templates/renderCardsTpl';
 import { onFetchImages } from './api-images';
+import { refs } from './refs';
 
 import 'simplelightbox/dist/simple-lightbox.min.css';
 import './css/styles.css';
 
 export let page = 1;
-
-const refs = {
-  form: document.querySelector('.search-form'),
-  gallery: document.querySelector('.gallery'),
-  buttonLoadMore: document.querySelector('.btn__load-more'),
-};
 
 refs.form.addEventListener('submit', onButtonSearchImagesClick);
 refs.buttonLoadMore.addEventListener('click', onButtonLoadMoreClick);
