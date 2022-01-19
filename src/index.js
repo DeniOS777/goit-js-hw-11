@@ -31,7 +31,7 @@ async function onButtonSearchImagesClick(e) {
   try {
     const { hits, totalHits } = await imagesApiService.onFetchImages();
 
-    if (hits.length === 0 || hits === 'undefined') {
+    if (hits.length === 0) {
       cleaningMarkupGallery();
       return imagesApiService.errorPayload();
     }
@@ -39,8 +39,15 @@ async function onButtonSearchImagesClick(e) {
     cleaningMarkupGallery();
     imagesApiService.successPayload(totalHits);
     renderImages(hits);
-    galleryModal.refresh();
     scrollDownPage();
+    galleryModal.refresh();
+
+    if (imagesApiService.page * imagesApiService.per_page > totalHits) {
+      return setTimeout(() => {
+        Notify.failure('We are sorry, but you have reached the end of search results.');
+      }, 2000);
+    }
+
     isVisibleButtonLoadMore();
   } catch (error) {
     Notify.failure(error.message);
@@ -53,16 +60,20 @@ async function onButtonLoadMoreClick() {
   try {
     const { hits, totalHits } = await imagesApiService.onFetchImages();
 
-    if (hits.length === 0 || hits === 'undefined') {
+    if (hits.length === 0) {
       return imagesApiService.errorPayload();
     }
 
-    if ((imagesApiService.page - 1) * imagesApiService.per_page > totalHits) {
-      return Notify.failure('We are sorry, but you have reached the end of search results.');
-    }
     renderImages(hits);
-    galleryModal.refresh();
     scrollDownPage();
+    galleryModal.refresh();
+
+    if (imagesApiService.page * imagesApiService.per_page > totalHits) {
+      return setTimeout(() => {
+        Notify.failure('We are sorry, but you have reached the end of search results.');
+      }, 1500);
+    }
+
     isVisibleButtonLoadMore();
   } catch (error) {
     Notify.failure(error.message);
