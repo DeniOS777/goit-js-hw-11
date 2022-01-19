@@ -49,6 +49,6 @@ export class ImagesApiService {
   }
 
   successPayload(totalHits) {
-    Notify.success(`Hooray! We found ${totalHits} images.`);
+    Notify.success(`Hooray! We found ${totalHits} images.`, { timeout: 1000 });
   }
 }
